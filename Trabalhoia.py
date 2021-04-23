@@ -61,9 +61,13 @@ def busca(labirinto, custo, inicio, fim):
     mi = (len(labirinto) // 2) ** 10
 
     movimentos = [[-1, 0 ], #cima
-                  [ 0, -1], #esquerda
+                  [ 0,-1 ], #esquerda
                   [ 1, 0 ], #baixo
-                  [ 0, 1 ]] #direita
+                  [ 0, 1 ], #direita
+                  [ 1, 1 ], #diagonal direita inferior
+                  [-1,-1 ], #diagonal esquerda superior
+                  [ 1,-1 ], #diagonal esquerda inferior
+                  [-1, 1 ]] #diagonal direita superior
     
 
     n_linhas, n_colunas = np.shape(labirinto)
@@ -101,10 +105,14 @@ def busca(labirinto, custo, inicio, fim):
         for nova_posicao in movimentos:
 
 
-            posicao_no = (no_atual.posicao[0] + nova_posicao[0], no_atual.posicao[1] + nova_posicao[1])
+            posicao_no = (no_atual.posicao[0] + nova_posicao[0], 
+                          no_atual.posicao[1] + nova_posicao[1])
             
             #testa se o nó está dentro do lábirinto
-            if(posicao_no[0] > (n_linhas -1) or posicao_no[0] < 0 or posicao_no[1] > (n_colunas -1) or posicao_no[1] < 0):
+            if(posicao_no[0] > (n_linhas -1) or 
+               posicao_no[0] < 0 or 
+               posicao_no[1] > (n_colunas -1) or 
+               posicao_no[1] < 0):
                continue
 
             #testa se não é uma parede
@@ -125,7 +133,8 @@ def busca(labirinto, custo, inicio, fim):
 
             filho.g = no_atual.g + custo
 
-            filho.h = (((filho.posicao[0] - no_final.posicao[0]) ** 2) + ((filho.posicao[1] - no_final.posicao[1]) ** 2))
+            filho.h = (((filho.posicao[0] - no_final.posicao[0])) + 
+                       ((filho.posicao[1] - no_final.posicao[1])))
             
             filho.f = filho.g + filho.h
 
@@ -149,14 +158,14 @@ def quadrado(ncor):
         pen.fillcolor(0, 0, 255)
         pen.begin_fill()
     else:
-        pen.fillcolor(105, 255, 255)
+        pen.fillcolor(196, 202, 206)
         pen.begin_fill()
     for i in range(4):
         pen.forward(50)
         pen.lt(90)
     pen.end_fill()
 
-def desenharlab():
+def desenharlab(labirinto, inicio, fim):
     pen.hideturtle()
     pen.speed('fastest')    
     pen.up()
@@ -179,7 +188,7 @@ def desenharlab():
                         pen.forward(50)
 
 
-def moveturt():
+def moveturt(inicio, caminho):
     turt = Pen()
     turt.shape("circle")
     turt.shapesize(1 / 2)
@@ -194,6 +203,7 @@ def moveturt():
             for l ,item in enumerate(linha):
                 if item == x:
                     turt.goto(25 + (50*l),(150 - (50 * i + 25)))
+                    turt.stamp()
                         
         x+=1
 def escrever(caminho):
@@ -204,24 +214,24 @@ def escrever(caminho):
 labirinto = [[0, 1, 0, 0, 0, 0, 1, 0],
              [0, 1, 0, 0, 0, 0, 1, 0],
              [0, 1, 0, 1, 1, 0, 1, 0],
-             [0, 1, 0, 0, 0, 0, 1, 0],
+             [0, 1, 0, 0, 1, 0, 0, 0],
              [0, 0, 0, 0, 1, 0, 1, 0],
-             [0, 0, 0, 0, 0, 0, 1, 0],
+             [0, 0, 0, 0, 1, 0, 1, 0],
              [0, 0, 0, 0, 1, 0, 1, 0],
              [0, 0, 0, 0, 0, 0, 0, 0]]
     
 inicio = [7, 0]
-fim = [4,7]
+fim = [0,7]
 custo = 1
-caminho = busca(labirinto,custo, inicio, fim)
+caminho = busca(labirinto, custo, inicio, fim)
 
 pen = Pen()
 
 if caminho is not None:
     
     escrever(caminho)
-    desenharlab()
-    moveturt()
+    desenharlab(labirinto, inicio, fim)
+    moveturt(inicio, caminho)
 
 else:
     print("Caminho não encontrado")
