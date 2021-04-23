@@ -196,7 +196,9 @@ def moveturt():
                     turt.goto(25 + (50*l),(150 - (50 * i + 25)))
                         
         x+=1
-
+def escrever(caminho):
+    print('\n'.join([''.join(["{:" ">3d}".format(item) for item in col]) 
+        for col in caminho]))
 
 
 labirinto = [[0, 1, 0, 0, 0, 0, 1, 0],
@@ -216,9 +218,8 @@ caminho = busca(labirinto,custo, inicio, fim)
 pen = Pen()
 
 if caminho is not None:
-    print('\n'.join([''.join(["{:" ">3d}".format(item) for item in col]) 
-        for col in caminho]))
-
+    
+    escrever(caminho)
     desenharlab()
     moveturt()
 
