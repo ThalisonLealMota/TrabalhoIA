@@ -209,7 +209,7 @@ def moveturt(inicio, caminho):
 
     if x >= np.max(caminho):
         turt.up()
-        turt.goto(-200,0)
+        turt.goto(200,200)
         fonte = ("Comic Sans", 20, "bold")
         turt.write("Caminho Encontrado",True,'center', fonte)
         turt.hideturtle()
