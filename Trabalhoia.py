@@ -133,8 +133,8 @@ def busca(labirinto, custo, inicio, fim):
 
             filho.g = no_atual.g + custo
 
-            filho.h = (((filho.posicao[0] - no_final.posicao[0])) + 
-                       ((filho.posicao[1] - no_final.posicao[1])))
+            filho.h = (((no_final.posicao[0] - filho.posicao[0])) + 
+                       ((no_final.posicao[1] - filho.posicao[1])))
             
             filho.f = filho.g + filho.h
 
@@ -206,22 +206,31 @@ def moveturt(inicio, caminho):
                     turt.stamp()
                         
         x+=1
+
+    if x >= np.max(caminho):
+        turt.up()
+        turt.goto(-200,0)
+        fonte = ("Comic Sans", 20, "bold")
+        turt.write("Caminho Encontrado",True,'center', fonte)
+        turt.hideturtle()
+        turt.down()
+
 def escrever(caminho):
     print('\n'.join([''.join(["{:" ">3d}".format(item) for item in col]) 
         for col in caminho]))
 
 
-labirinto = [[0, 1, 0, 0, 0, 0, 1, 0],
-             [0, 1, 0, 0, 0, 0, 1, 0],
-             [0, 1, 0, 1, 1, 0, 1, 0],
-             [0, 1, 0, 0, 1, 0, 0, 0],
-             [0, 0, 0, 0, 1, 0, 1, 0],
-             [0, 0, 0, 0, 1, 0, 1, 0],
-             [0, 0, 0, 0, 1, 0, 1, 0],
+labirinto = [[1, 0, 1, 0, 1, 0, 1, 0],
+             [0, 1, 0, 1, 0, 1, 0, 0],
+             [1, 1, 1, 1, 1, 1, 1, 0],
+             [1, 1, 0, 0, 1, 1, 1, 0],
+             [1, 0, 0, 0, 1, 1, 0, 1],
+             [1, 0, 0, 0, 1, 1, 1, 0],
+             [1, 0, 0, 0, 1, 1, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 0]]
     
 inicio = [7, 0]
-fim = [0,7]
+fim = [1,0]
 custo = 1
 caminho = busca(labirinto, custo, inicio, fim)
 
